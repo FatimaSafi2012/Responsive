@@ -1,27 +1,34 @@
-<?php
+
+ <?php
   session_start();
-include("include/db.php");
-require("include/config.inc.php");
-$msg="";
+  include("includes/db.inc.php");
+  require("includes/congif.inc.php");
+ $msg="";
 if (count($_POST)>0) {
-  te($_POST);
-  $username=$conn->real_escape_string($_POST['username']);
+ te($_POST);
+  $voranme=$conn->real_escape_string($_POST['vorname']);
+  $nachname=$conn->real_escape_string($_POST['nachname']);
+  $gebdatum=$conn->real_escape_string($_POST['gebdaum']);
   $email=$conn->real_escape_string($_POST['Email']);
   $pw1=$conn->real_escape_string($_POST['Passwort1']);
   $pw2=$conn->real_escape_string($_POST['Passwort2']);
   if ($pw1==$pw2) {
     $pw=md5($pw1);//hash passwort
     $sql = "
-    INSERT INTO users (username,email,passwort)
+    INSERT INTO tbl_kunden (Vorname,Nachname,GebDatum,Emailadresse,Passwort)
 VALUES
 (
-  '". $username ."',
-  '". $email ."',
-   '". $pw ."'
+  '". $voranme ."',
+  '". $nachname ."',
+   '". $gebdatum ."',
+    '". $email ."',
+      '". $pw ."'
+
    )";
 
 if ($conn->query($sql) === TRUE) {
   $msg= "<p>Sie haben erfolgreich registriert.</p>";
+  header("Location:index.php");
 } else {
   $msg= "Error: " . $sql . "<br>" . $conn->error;
 }
@@ -53,11 +60,23 @@ if ($conn->query($sql) === TRUE) {
      <div class="center">
      <form  method="post">
      <div class="mb-3 row">
-         <label for="username" class="col-sm-2 col-form-label">Username:</label>
+         <label for="vorname" class="col-sm-2 col-form-label">Vorname:</label>
          <div class="col-sm-10">
-           <input type="text" class="form-control" id="username" name="username">
+           <input type="text" class="form-control" id="vorname" name="vorname">
          </div>
        </div>
+         <div class="mb-3 row">
+             <label for="nachname" class="col-sm-2 col-form-label">Nachname:</label>
+             <div class="col-sm-10">
+               <input type="text" class="form-control" id="nachname" name="nachname">
+             </div>
+       </div>
+       <div class="mb-3 row">
+           <label for="gebdaum" class="col-sm-2 col-form-label">GebDatum:</label>
+           <div class="col-sm-10">
+             <input type="date" class="form-control" id="gebdaum" name="gebdaum">
+           </div>
+     </div>
        <div class="mb-3 row">
          <label for="Email" class="col-sm-2 col-form-label">Email:</label>
          <div class="col-sm-10">
@@ -93,3 +112,4 @@ if ($conn->query($sql) === TRUE) {
              </div>
    </body>
  </html>
+
